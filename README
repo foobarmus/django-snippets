@@ -1,27 +1,3 @@
-Search the Web
-==============
-
-A simple Yahoo BOSS v2 search application using django and oauth
-
-
-Usage notes
------------
-
-To sort by a ranking other than Yahoo, place a sort switch in
-your query, eg 'Jensen Button sort:alexa'
-
-
-Dependencies
-------------
-
-Python 2.6+
-Django 1.1+
-django-oauth-consumer
-
-if serving with Apache:
-    apache2.2
-    mod-wsgi 
-
 VirtualHost config (Apache)
 ---------------------------
 
