@@ -1,0 +1,56 @@
+Search the Web
+==============
+
+A simple Yahoo BOSS v2 search application using django and oauth
+
+
+Usage notes
+-----------
+
+To sort by a ranking other than Yahoo, place a sort switch in
+your query, eg 'Jensen Button sort:alexa'
+
+
+Dependencies
+------------
+
+Python 2.6+
+Django 1.1+
+django-oauth-consumer
+
+if serving with Apache:
+    apache2.2
+    mod-wsgi 
+
+VirtualHost config (Apache)
+---------------------------
+
+# Security notes:
+#
+# 1. Because django.wsgi is inside a folder containing other
+#    code, make it available specifically, rather than by
+#    unlocking it's parent directory.
+#
+# 2. Static content is best served by Apache, rather than
+#    django.
+
+<VirtualHost *:80>
+
+    ServerName yourservername.com
+    ServerAlias www.yourservername.com
+
+    Alias /static/ /path/to/django-snippets/static/
+    <Directory /path/to/django-snippets/static/>
+        AllowOverride None
+        Options all 
+        Order deny,allow
+        Allow from all 
+    </Directory>
+
+    WSGIScriptAlias / /path/to/django-snippets/django.wsgi
+    <Files /path/to/django-snippets/django.wsgi>
+        Order deny,allow
+        Allow from all 
+    </Files>
+
+</VirtualHost>

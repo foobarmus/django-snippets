@@ -1,0 +1,9 @@
+{% extends "site.html" %}
+
+{% block results %}
+    {% if e %}
+        {{e|safe}}
+    {% else %}
+        <p>Most likely, the result set contains a website with incomplete metadata.</p>
+    {% endif %}
+{% endblock %}

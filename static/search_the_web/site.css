@@ -1,0 +1,44 @@
+
+/* layout */
+
+body {text-align:center;}
+#broadcast {position:absolute;width:25em;top:2em;left:0;right:0;margin:0 auto;}
+form {width:600px;margin:4em auto 2em;}
+#results {width:576px;margin:0 auto;}
+#attribution {margin:2em;}
+
+
+/* minutia */
+
+#broadcast {background:#fed;-moz-border-radius:1ex;border-radius:1ex;border:1px solid white;}
+#q-label {float:left;line-height:2em;}
+fieldset {border:0;margin:0;padding:0;}
+legend {display:none}
+input {width:576px;padding:8px 10px;-moz-border-radius:1ex;border-radius:1ex;border:2px solid #9ae;}
+input:focus {outline:none}
+img {border:none;}
+
+
+/* results */
+
+ul, li {display:block;margin:0;padding:0;}
+.result {margin-bottom:1.5em;overflow:hidden;}
+    .title {float:left;}
+    .ranks {float:right;}
+    .abstract {clear:both;}
+
+
+/* fonts */
+
+body {font:medium Arial,sans-serif;}
+form, #results {text-align:left;}
+input {font-size:large}
+#q-label {color:#ccd;}
+#broadcast {line-height:2em;color:#569;}
+#results, #broadcast {font-size:small;}
+    .title {font-size:medium;}
+    .ranks {font-size:x-small;}
+        .alexa {color:#396;}
+    .date {color:#999;}
+    .url {font-size:x-small;}
+    .url a {color:#396;}

@@ -1,0 +1,27 @@
+{% extends "site.html" %}
+
+{% block results %}
+    {% if results %}
+        <ul id="results">
+            {% for result in results %}
+                <li class="tile">
+                    <ul class="result">
+                        <li class="title">
+                            <a href="{{result.url}}">{{result.title|striptags}}</a>
+                        </li>
+                        <li class="ranks">
+                            <span class="alexa">Alexa {{result.alexa_rank}}</span>
+                        </li>
+                        <li class="abstract">
+                            {{result.abstract|striptags}} &emsp;
+                            <span class="date">&ndash; {{result.date}}</span>
+                        </li>
+                        <li class="url">
+                            <a href="{{result.url}}">{{result.url}}</a>
+                        </li>
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
