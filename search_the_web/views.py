@@ -87,7 +87,7 @@ def search(request):
 
             # oauth request payload
             url = 'http://yboss.yahooapis.com/ysearch/web?q='
-            oauth_url = url + urllib.quote(urllib.quote_plus(query)) # space -> '+' -> quote('+')
+            oauth_url = url + urllib.quote(query) # space -> '+' -> quote('+')
             consumer = oauth2.Consumer(**config.yboss)
             params = {
                 'oauth_version':'1.0',
@@ -100,7 +100,7 @@ def search(request):
 
             # yboss request/response
             http = httplib2.Http()
-            response, content = http.request(url + urllib.quote_plus(query),
+            response, content = http.request(oauth_url,
                                              'GET', headers=oauth_header)
             if response.status != 200:
                 raise WebService('Response Code %s: %s' % (response.status,
