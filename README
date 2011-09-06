@@ -65,7 +65,7 @@ Notes:
 
 2. Because django.wsgi resides in a folder containing other code,
    for security reasons you must make it available explicitly,
-   rather than by unlocking it's parent directory.
+   rather than by unlocking its parent directory.
 
 <VirtualHost *:80>
 
