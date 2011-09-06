@@ -70,16 +70,17 @@ def search(request):
         user = getu(request.META['REMOTE_ADDR'])
         f = request.GET
         results = None
+        sort = None
         broadcast = (f.has_key('broadcast') and
                      actual(f['broadcast'])) and f['broadcast'] or None
         if f.has_key('q') and actual(f['q']):
             qbits = re.split('sort:\s*(\w*)', f['q'])
             if len(qbits) > 1:
-                f['sort'] = qbits.pop(1).lower()
-                if not f['sort'] in ['alexa']:
-                    if not f['sort'] == 'yahoo':
-                        broadcast = '%s rank not supported. Using default... (yahoo)' % f['sort'].capitalize()
-                    f['sort'] = None
+                sort = qbits.pop(1).lower()
+                if not sort in ['alexa']:
+                    if not sort == 'yahoo':
+                        broadcast = '%s rank not supported. Using default... (yahoo)' % sort.capitalize()
+                    sort = None
                 query = ' '.join([w.strip() for w in qbits]).strip()
             else:
                 query = f['q']
@@ -107,7 +108,7 @@ def search(request):
                 raise ResponseNotParsable(content)
 
             # mash up search results with additional info
-            results = mash(ysearch_dom, user, f.has_key('sort') and f['sort'] or None)
+            results = mash(ysearch_dom, user, sort)
 
         args = Context({
             'results':results,
