@@ -3,7 +3,7 @@ Dependencies
 ------------
 
 Python 2.6+
-Django 1.1+
+Django 1.1
 python-oauth2
 
 if serving with Apache:
@@ -14,18 +14,17 @@ if serving with Apache:
 Installation
 ------------
 
-Unless you're comfortable mucking about with the
-package a bit, unpack it into /usr/local/django/
-and rename it to django-snippets. On Ubuntu, for
-example:
+Unless you're comfortable mucking about with the package a bit,
+unpack it into /usr/local/django/ and rename it to django-snippets.
+On Ubuntu, for example:
 
 # cd /usr/local/django/
 # wget https://github.com/foobarmus/django-snippets/tarball/master
 # tar -xzf foobarmus-django-snippets-c231f5e.tar.gz
 # mv foobarmus-django-snippets-c231f5e/ django-snippets
 
-Sync the database and give it to Apache (if you
-want to serve it properly).
+Sync the database and give it to Apache (if you want to serve it
+properly).
 
 # cd django-snippets/
 # python manage.py syncdb
@@ -35,10 +34,9 @@ want to serve it properly).
 Yahoo customer details
 ----------------------
 
-When you set up a boss-enabled application at
-developer.yahoo.com you get a consumer key and consumer
-secret. The app needs to know these, in order to sign
-the oauth payload.
+When you set up a boss-enabled application at developer.yahoo.com
+you, get a consumer key and consumer secret. The app needs to know
+these, in order to sign the oauth payload.
 
 Create this file...
 /usr/local/django/django-snippets/search_the_web/config.py
@@ -50,8 +48,8 @@ yboss = {
     'secret':'YOUR_CUSTOMER_SECRET'
 }
 
-At this point, you should be able to run the app using
-the django's development server.
+At this point, you should be able to run the app using the django's
+development server.
 
 # python manage.py runserver
 
@@ -61,15 +59,13 @@ VirtualHost (Apache)
 
 Notes:
 
-1. Alias /static/ ... will ensure Apache serves
-   static content directly, rather than sucking it
-   through django. This directive must occur prior
-   to the WSGIScriptAlias.
+1. Alias /static/ ... will ensure Apache serves static content
+   directly, rather than sucking it through django. This directive
+   must occur prior to the WSGIScriptAlias.
 
-2. Because django.wsgi resides in a folder containing
-   other code, for security reasons you must make it
-   available explicitly, rather than by unlocking
-   it's parent directory.
+2. Because django.wsgi resides in a folder containing other code,
+   for security reasons you must make it available explicitly,
+   rather than by unlocking it's parent directory.
 
 <VirtualHost *:80>
 
