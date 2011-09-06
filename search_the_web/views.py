@@ -4,18 +4,18 @@
 #
 # It is freeware, but if you intend to use it on a live site, please
 # be careful. It is utterly unwarranted and unsupported. If it stops
-# working it will not be fixed. Before using, you should also check
-# the Alexa terms of service, which could have changed since I wrote
-# this.
+# working it will not be fixed. Before using it, you should check
+# the Alexa terms of service, which may have changed since the time
+# of writing.
 
-import os, httplib2, urllib, re, sys, oauth2, time, json
+import os, httplib2, urllib, re, oauth2, time, json
 from xml.dom import minidom as xml
 
 from django.shortcuts import render_to_response
 from django.template import Context
 
 from main.search_the_web.models import User
-from exceptions import WebService, ResponseNotParsable
+from exceptions import WebService
 import config
 
 # empty attribute tester for wrapped dictionaries
@@ -60,13 +60,13 @@ def mash(ysearch_parsed, user, sort_instruction):
         })
     if sort_instruction:
         results.sort(key=lambda result: int(result['%s_rank' % sort_instruction]), reverse=True)
-    return results
+    return results[:10]
 
 
 # page generator
 
 def search(request):
-#    try:
+    try:
         user = getu(request.META['REMOTE_ADDR'])
         f = request.GET
         results = None
@@ -86,31 +86,26 @@ def search(request):
                 query = f['q']
 
             # oauth request payload
-            url = 'http://yboss.yahooapis.com/ysearch/web?q='
-            oauth_url = url + urllib.quote(query) # space -> '+' -> quote('+')
+            url = 'http://yboss.yahooapis.com/ysearch/web?q=%s' % urllib.quote(query)
             consumer = oauth2.Consumer(**config.yboss)
             params = {
                 'oauth_version':'1.0',
                 'oauth_nonce':oauth2.generate_nonce(),
                 'oauth_timestamp':int(time.time()),
             }
-            oauth_request = oauth2.Request(method='GET', url=oauth_url, parameters=params)
+            oauth_request = oauth2.Request(method='GET', url=url, parameters=params)
             oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
             oauth_header=oauth_request.to_header(realm='yahooapis.com')
 
             # yboss request/response
             http = httplib2.Http()
-            response, content = http.request(oauth_url,
-                                             'GET', headers=oauth_header)
+            response, content = http.request(url, 'GET', headers=oauth_header)
             if response.status != 200:
                 raise WebService('Response Code %s: %s' % (response.status,
                                                            response.reason))
-            try:
-                ysearch_dom = json.loads(content)
-            except:
-                raise ResponseNotParsable(content)
 
             # mash up search results with additional info
+            ysearch_dom = json.loads(content)
             results = mash(ysearch_dom, user, sort)
 
         args = Context({
@@ -120,11 +115,8 @@ def search(request):
         })
         return render_to_response('results.html', args)
 
-#    except ResponseNotParsable, e:
-#        return HttpResponse(e)
-#
-#    except WebService, e:
-#        return render_to_response('error.html', {'broadcast':'Unable to retrieve results... %s' % e})
-#
-#    except:
-#        return render_to_response('error.html', {'broadcast':'Error processing result set...'})
+    except WebService, e:
+        return render_to_response('error.html', {'broadcast':'Unable to retrieve results... %s' % e})
+
+    except:
+        return render_to_response('error.html', {'broadcast':'Error processing result set...'})
