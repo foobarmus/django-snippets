@@ -94,17 +94,17 @@ def search(request):
                 'oauth_nonce':oauth2.generate_nonce(),
                 'oauth_timestamp':int(time.time()),
             }
-            oauth_request = oauth2.Request(method='GET',
-                                           url=url + urllib.quote_plus(query),
-                                           parameters=params)
+            oauth_request = oauth2.Request(method='GET', url=oauth_url, parameters=params)
             oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
             oauth_header=oauth_request.to_header(realm='yahooapis.com')
 
             # yboss request/response
             http = httplib2.Http()
-            response, content = http.request(url, 'GET', headers=oauth_header)
+            response, content = http.request(url + urllib.quote_plus(query),
+                                             'GET', headers=oauth_header)
             if response.status != 200:
-                raise WebService('Response Code %s: %s' % (response.status, response.reason))
+                raise WebService('Response Code %s: %s' % (response.status,
+                                                           response.reason))
             try:
                 ysearch_dom = json.loads(content)
             except:
