@@ -86,14 +86,17 @@ def search(request):
                 query = f['q']
 
             # oauth request payload
-            url = 'http://yboss.yahooapis.com/ysearch/web?q=%s' % urllib.quote_plus(query)
+            url = 'http://yboss.yahooapis.com/ysearch/web?q='
+            oauth_url = url + urllib.quote(urllib.quote_plus(query)) # space -> '+' -> quote('+')
             consumer = oauth2.Consumer(**config.yboss)
             params = {
                 'oauth_version':'1.0',
                 'oauth_nonce':oauth2.generate_nonce(),
                 'oauth_timestamp':int(time.time()),
             }
-            oauth_request = oauth2.Request(method='GET', url=url, parameters=params)
+            oauth_request = oauth2.Request(method='GET',
+                                           url=url + urllib.quote_plus(query),
+                                           parameters=params)
             oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
             oauth_header=oauth_request.to_header(realm='yahooapis.com')
 
