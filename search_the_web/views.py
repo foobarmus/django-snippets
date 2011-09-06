@@ -4,23 +4,19 @@
 #
 # It is freeware, but if you intend to use it on a live site, please
 # be careful. It is utterly unwarranted and unsupported. If it stops
-# working it will not be fixed. It may contain code that violates
-# the terms of service of various websites.
-#
-# I hereby indemnify myself against the actions of anyone who uses
-# it for any purpose other than assessing my programming skills.
+# working it will not be fixed. Before using, you should also check
+# the Alexa terms of service, which could have changed since I wrote
+# this.
 
-import os, httplib, urllib, re, sys
-import xml.dom.minidom as xml
+import os, httplib2, urllib, re, sys, oauth2, time, json
+from xml.dom import minidom as xml
 
 from django.shortcuts import render_to_response
 from django.template import Context
-from django.http import HttpResponse # can remove after yboss revamp - only used by ResponseNotParsable
 
 from main.search_the_web.models import User
 from exceptions import WebService, ResponseNotParsable
-#import config
-import django_oauth_consumer
+import config
 
 # empty attribute tester for wrapped dictionaries
 
@@ -47,26 +43,21 @@ def arank(url, user):
     return alexa_rank
 
 
-# result generator - Yahoo BOSS
+# mash function
 
-def mash(ysearch_dom, user, sort_instruction):
+def mash(ysearch_parsed, user, sort_instruction):
     results = []
-    raw_results = ysearch_dom.getElementsByTagName('result')
-    for result in raw_results:
-        # NOTE: potentially unsafe html tags included in CDATA nodes are stripped
+    for result in ysearch_parsed['bossresponse']['web']['results']:
+        # NOTE: potentially unsafe html tags included in data are stripped
         # by template parser, so no need to worry about them here
-        url = result.getElementsByTagName('url')[0].firstChild.data
-        title_node = result.getElementsByTagName('title')[0].firstChild
-        date_node = result.getElementsByTagName('date')[0].firstChild
-        abstract_node = result.getElementsByTagName('abstract')[0].firstChild
         results.append({
-            'title':title_node and title_node.data or '', # presence checks required for all except url
-            'url':url,
-            'date':date_node and date_node.data or '',
-            'abstract':abstract_node and abstract_node.data or '',
-            'alexa_rank':arank(url, user)
+            'title':result['title'],
+            'url':result['url'],
+            'date':result['date'],
+            'abstract':result['abstract'],
+            'alexa_rank':arank(result['url'], user),
+            # 'other_supported_rank':etc
         })
-    ysearch_dom.unlink()
     if sort_instruction:
         results.sort(key=lambda result: int(result['%s_rank' % sort_instruction]), reverse=True)
     return results
@@ -79,7 +70,8 @@ def search(request):
         user = getu(request.META['REMOTE_ADDR'])
         f = request.GET
         results = None
-        broadcast = (f.has_key('broadcast') and actual(f['broadcast'])) and f['broadcast'] or None
+        broadcast = (f.has_key('broadcast') and
+                     actual(f['broadcast'])) and f['broadcast'] or None
         if f.has_key('q') and actual(f['q']):
             qbits = re.split('sort:\s*(\w*)', f['q'])
             if len(qbits) > 1:
@@ -87,22 +79,35 @@ def search(request):
                 if not f['sort'] in ['alexa']:
                     if not f['sort'] == 'yahoo':
                         broadcast = '%s rank not supported. Using default... (yahoo)' % f['sort'].capitalize()
-                    f.sort = None
+                    f['sort'] = None
                 query = ' '.join([w.strip() for w in qbits]).strip()
             else:
                 query = f['q']
 
-            cx = httplib.HTTPConnection('boss.yahooapis.com')
-            cx.request('GET', '/ysearch/web/v1/%s?format=xml&appid=%s' % (urllib.quote_plus(query), ''))#config.appid))
-            response = cx.getresponse()
+            # oauth request payload
+            url = 'http://yboss.yahooapis.com/ysearch/web?q=%s' % urllib.quote_plus(query)
+            consumer = oauth2.Consumer(**config.yboss)
+            params = {
+                'oauth_version':'1.0',
+                'oauth_nonce':oauth2.generate_nonce(),
+                'oauth_timestamp':int(time.time()),
+            }
+            oauth_request = oauth2.Request(method='GET', url=url, parameters=params)
+            oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
+            oauth_header=oauth_request.to_header(realm='yahooapis.com')
+
+            # yboss request/response
+            http = httplib2.Http()
+            response, content = http.request(url, 'GET', headers=oauth_header)
             if response.status != 200:
                 raise WebService('Response Code %s: %s' % (response.status, response.reason))
-            raw = response.read()
             try:
-                ysearch_dom = xml.parseString(raw)
+                ysearch_dom = json.loads(content)
             except:
-                raise ResponseNotParsable(raw)
-            results = mash(ysearch_dom, user, f['sort'])
+                raise ResponseNotParsable(content)
+
+            # mash up search results with additional info
+            results = mash(ysearch_dom, user, f.has_key('sort') and f['sort'] or None)
 
         args = Context({
             'results':results,
