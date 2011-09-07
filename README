@@ -22,7 +22,7 @@ version, it may be a good idea to remove it first.
 # apt-get purge python-httplib2
 
 $ wget https://github.com/simplegeo/python-oauth2/tarball/master
-$ tar -xzf master
+$ tar -xzf simplegeo-python-oauth2-1fcc1a6.tar.gz
 $ cd simplegeo-python-oauth2-1fcc1a6/
 # python setup.py install
 
