@@ -1,6 +1,6 @@
 # Django settings for snippets project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 DATABASE_ENGINE = 'sqlite3'
 DATABASE_NAME = '/usr/local/django/snippets/db/spaghetti_mess.db'
