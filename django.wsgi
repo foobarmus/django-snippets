@@ -1,6 +1,6 @@
 import os, sys
-sys.path.append('/home/mark/django')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'
+sys.path.append('/usr/local/django')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'snippets.settings'
 
 import django.core.handlers.wsgi
 
