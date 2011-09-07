@@ -1,12 +1,32 @@
-# Search the Web - author: Mark Donald
-#
+# Copyright (c) 2011, Mark Donald
+# All rights reserved.
+# 
 # This software was written as a web services coding exercise.
 #
-# It is freeware, but if you intend to use it on a live site, please
-# be careful. It is utterly unwarranted and unsupported. If it stops
-# working it will not be fixed. Before using it, you should check
-# the Alexa terms of service, which may have changed since the time
-# of writing.
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+# 
+#     * Redistributions of source code must retain the above copyright notice,
+#       this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+# Furthermore, if you intend to use it on a live site, you should check the
+# Alexa toolbar terms of service, which may have changed since the time of
+# writing.
 
 import os, httplib2, urllib, re, oauth2, time, json
 from xml.dom import minidom as xml
@@ -14,13 +34,9 @@ from xml.dom import minidom as xml
 from django.shortcuts import render_to_response
 from django.template import Context
 
-from main.search_the_web.models import User
+from snippets.search_the_web.models import User
 from exceptions import WebService
 import config
-
-# empty attribute tester for wrapped dictionaries
-
-def actual(thing): return thing and True or False
 
 
 # Alexa support
@@ -71,13 +87,12 @@ def search(request):
         f = request.GET
         results = None
         sort = None
-        broadcast = (f.has_key('broadcast') and
-                     actual(f['broadcast'])) and f['broadcast'] or None
-        if f.has_key('q') and actual(f['q']):
+        broadcast = (f.has_key('broadcast') and f['broadcast']) and f['broadcast'] or None
+        if f.has_key('q') and f['q']:
             qbits = re.split('sort:\s*(\w*)', f['q'])
             if len(qbits) > 1:
                 sort = qbits.pop(1).lower()
-                if not sort in ['alexa']:
+                if not sort in ['alexa']: # ['alexa', 'other_support_rank', 'etc']
                     if not sort == 'yahoo':
                         broadcast = '%s rank not supported. Using default... (yahoo)' % sort.capitalize()
                     sort = None

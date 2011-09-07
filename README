@@ -10,38 +10,58 @@ if serving with Apache:
     Apache 2.2
     mod-wsgi 
 
+On Lucid Lynx, you can take of most of these with:
+
+# apt-get install apache2-mpm-worker libapache2-mod-wsgi python-django
+
+but you will need to install oauth2 from source. This will install
+a specific version of python-httplib2, which is fine, but if you
+already have httplib2 installed and you don't care about the
+version, it may be a good idea to remove it first.
+
+# apt-get purge python-httplib2
+
+$ wget https://github.com/simplegeo/python-oauth2/tarball/master
+$ tar -xzf master
+$ cd simplegeo-python-oauth2-1fcc1a6/
+# python setup.py install
+
 
 Installation
 ------------
 
 Unless you're comfortable mucking about with the package a bit,
-unpack it into /usr/local/django/ and rename it to django-snippets.
-On Ubuntu, for example:
+unpack it into /usr/local/django/ and rename it to snippets. You
+may have to create the django directory first. On Ubuntu, for
+example:
 
-# cd /usr/local/django/
-# wget https://github.com/foobarmus/django-snippets/tarball/master
-# tar -xzf foobarmus-django-snippets-c231f5e.tar.gz
-# mv foobarmus-django-snippets-c231f5e/ django-snippets
+# mkdir /usr/local/django
+# chown yourself /usr/local/django
+
+$ cd /usr/local/django/
+$ wget https://github.com/foobarmus/django-snippets/tarball/master
+$ tar -xzf foobarmus-django-snippets-c231f5e.tar.gz
+$ mv foobarmus-django-snippets-c231f5e/ snippets
 
 Sync the database and give it to Apache (if you want to serve it
 properly).
 
-# cd django-snippets/
-# python manage.py syncdb
+$ cd snippets/
+$ python manage.py syncdb
 # chown -R www-data db/
 
 
 Yahoo consumer details
 ----------------------
 
-When you set up a boss-enabled application at developer.yahoo.com
-you, get a consumer key and consumer secret. The app needs to know
-these, in order to sign the oauth payload.
+When you set up a boss-enabled application at developer.yahoo.com,
+you get a consumer key and consumer secret. The app uses these to
+sign the oauth payload.
 
 Create this file...
-/usr/local/django/django-snippets/search_the_web/config.py
+/usr/local/django/snippets/search_the_web/config.py
 
-...with a single dictionary in it, as follows:
+with a single dictionary in it, as follows:
 
 yboss = {
     'key':'YOUR_CUSTOMER_KEY',
@@ -52,6 +72,11 @@ At this point, you should be able to run the app using the django's
 development server.
 
 # python manage.py runserver
+
+If you want to extend the app at some point to do anything remotely
+interesting with non-oauth sessions, which it doesn't at the moment,
+change the SECRET_KEY in snippets/settings.py to something long and
+unique and keep it secret.
 
 
 VirtualHost (Apache)
@@ -72,16 +97,16 @@ Notes:
     ServerName yourservername.com
     ServerAlias www.yourservername.com
 
-    Alias /static/ /usr/local/django/django-snippets/static/
-    <Directory /usr/local/django/django-snippets/static/>
+    Alias /static/ /usr/local/django/snippets/static/
+    <Directory /usr/local/django/snippets/static/>
         AllowOverride None
         Options all 
         Order deny,allow
         Allow from all 
     </Directory>
 
-    WSGIScriptAlias / /usr/local/django/django-snippets/django.wsgi
-    <Files /usr/local/django/django-snippets/django.wsgi>
+    WSGIScriptAlias / /usr/local/django/snippets/django.wsgi
+    <Files /usr/local/django/snippets/django.wsgi>
         Order deny,allow
         Allow from all 
     </Files>
