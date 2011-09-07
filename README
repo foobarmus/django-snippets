@@ -48,7 +48,8 @@ properly).
 
 $ cd snippets/
 $ python manage.py syncdb
-# chown -R www-data db/
+# chown -R yourself:www-data db/
+# chmod -R g+w db/
 
 
 Yahoo consumer details
