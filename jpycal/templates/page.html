@@ -1,0 +1,18 @@
+{% extends "html5.html" %}
+
+{% block html %}
+<head>
+    {% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="/static/fullcalendar.css" />
+        <link rel="stylesheet" type="text/css" href="/static/jpycal.css" />
+        <script type="text/javascript" src="/static/jquery.js"></script>
+        <script type="text/javascript" src="/static/jquery-ui.js"></script>
+        <script type="text/javascript" src="/static/fullcalendar.js"></script>
+        <script type="text/javascript" src="/static/jpycal.js"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+{% endblock %}
