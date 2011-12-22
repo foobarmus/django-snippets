@@ -28,13 +28,14 @@
 # Alexa toolbar terms of service, which may have changed since the time of
 # writing.
 
-import os, httplib2, urllib, re, oauth2, time, json
+import os, httplib2, urllib, re, oauth2, time
 from xml.dom import minidom as xml
 
 from django.shortcuts import render_to_response
 from django.template import Context
+from django.utils import simplejson as json
 
-from snippets.search_the_web.models import User
+from django_snippets.search_the_web.models import User
 from exceptions import WebService
 import config
 

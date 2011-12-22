@@ -1,0 +1,57 @@
+{% extends "site.html" %}
+
+{% block content %}
+    <form id="timed" title="New Event">
+        <fieldset>
+            <label for="title">Title</label>
+            <input name="title" class="text ui-corner-all" value="" />
+            <label for="start">Start</label>
+            <input id="start" name="start" class="text ui-corner-all" />
+            <label for="end">End</label>
+            <input id="end" name="end" class="text ui-corner-all" />
+            <label for="description">Other info</label>
+            <textarea name="description" class="text ui-corner-all"></textarea>
+        </fieldset>
+    </form>
+
+    <form id="timed-ed" title="Event">
+        <fieldset>
+            <label for="title">Title</label>
+            <input id="title_ed" name="title" class="text ui-corner-all" value="" />
+            <label for="start">Start</label>
+            <input id="start_ed" name="start" class="text ui-corner-all" />
+            <label for="end">End</label>
+            <input id="end_ed" name="end" class="text ui-corner-all" />
+            <label for="description">Other info</label>
+            <textarea id="description_ed" name="description" class="text ui-corner-all"></textarea>
+        </fieldset>
+        <input id="url_ed" name="url" type="hidden" />
+    </form>
+
+    <form id="allday" title="New All Day Event">
+        <h4 id="titledate"></h4>
+        <fieldset>
+            <label for="title">Title</label>
+            <input name="title" class="text ui-corner-all" value="" />
+            <label for="description">Other info</label>
+            <textarea name="description" class="text ui-corner-all"></textarea>
+        </fieldset>
+        <input id="ad_start" name="start" type="hidden" />
+        <input name="allDay" type="hidden" value="true" />
+    </form>
+
+    <form id="allday-ed" title="All Day Event">
+        <h4 id="titledate_ed"></h4>
+        <fieldset>
+            <label for="title">Title</label>
+            <input id="ad_title_ed" name="title" class="text ui-corner-all" value="" />
+            <label for="description">Other info</label>
+            <textarea id="ad_description_ed" name="description" class="text ui-corner-all"></textarea>
+        </fieldset>
+        <input id="ad_start_ed" name="start" type="hidden" />
+        <input name="allDay" type="hidden" value="true" />
+        <input id="ad_url_ed" name="url" type="hidden" />
+    </form>
+
+    <div id="calendar"></div>
+{% endblock %}

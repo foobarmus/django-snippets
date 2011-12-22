@@ -1,14 +1,15 @@
-# Django settings for snippets project.
+from os import path
 
-DEBUG = False
+DEBUG = True # REMEMBER TO CHANGE FOR PRODUCTION!!
 TEMPLATE_DEBUG = DEBUG
-DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = '/usr/local/django/snippets/db/spaghetti_mess.db'
+DIR = path.abspath(path.dirname(__file__))
+DATABASE_ENGINE = '' # DATABASE_ENGINE = 'sqlite3'
+DATABASE_NAME = '' # DATABASE_NAME = DIR + '/db/spaghetti_mess.db'
 TIME_ZONE = 'Australia/Sydney'
 LANGUAGE_CODE = 'en-AU'
 SITE_ID = 1
 USE_I18N = True
-MEDIA_ROOT = '/usr/local/django/snippets/static/'
+MEDIA_ROOT = DIR + '/static/'
 MEDIA_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 SECRET_KEY = '<YOUR_SECRET_KEY>'
@@ -18,14 +19,14 @@ TEMPLATE_LOADERS = (
 )
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
-ROOT_URLCONF = 'snippets.urls'
+ROOT_URLCONF = 'django_snippets.urls'
 TEMPLATE_DIRS = (
-    '/usr/local/django/snippets/templates',
-    '/usr/local/django/snippets/search_the_web/templates',
+    DIR + 'templates',
+    DIR + 'search_the_web/templates',
+    DIR + 'jpycal/templates',
 )
 INSTALLED_APPS = (
-    'snippets.search_the_web',
+    'django_snippets.search_the_web',
+    'django_snippets.jpycal',
 )

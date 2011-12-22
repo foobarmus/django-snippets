@@ -2,54 +2,34 @@
 Dependencies
 ------------
 
-Python 2.6+
-Django 1.1
-python-oauth2
+python-oauth2   https://github.com/simplegeo/python-oauth2
+httplib2        http://code.google.com/p/httplib2
 
-if serving with Apache:
-    Apache 2.2
-    mod-wsgi 
+Additional for non-GAE deployment:
+    Django 1.1+
 
-On Lucid Lynx, you can take of most of these with:
-
-# apt-get install apache2-mpm-worker libapache2-mod-wsgi python-django
-
-but you will need to install oauth2 from source. This will install
-a specific version of python-httplib2, which is fine, but if you
-already have httplib2 installed and you don't care about the
-version, it may be a good idea to remove it first.
-
-# apt-get purge python-httplib2
-
-$ wget https://github.com/simplegeo/python-oauth2/tarball/master
-$ tar -xzf simplegeo-python-oauth2-1fcc1a6.tar.gz
-$ cd simplegeo-python-oauth2-1fcc1a6/
-# python setup.py install
+    if serving with Apache:
+        Apache 2.2
+        mod-wsgi 
 
 
-Installation
-------------
+Installation (non-GAE)
+----------------------
 
-Unless you're comfortable mucking about with the package a bit,
-unpack it into /usr/local/django/ and rename it to snippets. You
-may have to create the django directory first. On Ubuntu, for
-example:
+1.  Create a django project called 'django_snippets' and copy
+    everything from the tarball into it, overwriting settings.py,
+    etc...
 
-# mkdir /usr/local/django
-# chown yourself /usr/local/django
+2.  Uncomment the database lines in settings.py
 
-$ cd /usr/local/django/
-$ wget https://github.com/foobarmus/django-snippets/tarball/master
-$ tar -xzf foobarmus-django-snippets-c231f5e.tar.gz
-$ mv foobarmus-django-snippets-c231f5e/ snippets
+3.  Create a db/ directory inside the project
 
-Sync the database and give it to Apache (if you want to serve it
-properly).
+4.  Sync the database and give it to Apache (if you want to serve
+    it properly).
 
-$ cd snippets/
-$ python manage.py syncdb
-# chown -R yourself:www-data db/
-# chmod -R g+w db/
+    $ python manage.py syncdb
+    # chown -R yourself:www-data db/
+    # chmod -R g+w db/
 
 
 Yahoo consumer details
@@ -59,25 +39,23 @@ When you set up a boss-enabled application at developer.yahoo.com,
 you get a consumer key and consumer secret. The app uses these to
 sign the oauth payload.
 
-Create this file...
-/usr/local/django/snippets/search_the_web/config.py
-
-with a single dictionary in it, as follows:
+Create a config.py file inside the project, with a single
+dictionary in it, as follows:
 
 yboss = {
     'key':'YOUR_CUSTOMER_KEY',
     'secret':'YOUR_CUSTOMER_SECRET'
 }
 
-At this point, you should be able to run the app using the django's
+At this point, you should be able to run the app using django's
 development server.
 
 # python manage.py runserver
 
 If you want to extend the app at some point to do anything remotely
 interesting with non-oauth sessions, which it doesn't at the moment,
-change the SECRET_KEY in snippets/settings.py to something long and
-unique and keep it secret.
+change the SECRET_KEY in snippets/settings.py to something
+appropriate and keep it secret.
 
 
 VirtualHost (Apache)
