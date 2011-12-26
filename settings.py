@@ -1,6 +1,6 @@
 from os import path
 
-DEBUG = True # REMEMBER TO CHANGE FOR PRODUCTION!!
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 DIR = path.abspath(path.dirname(__file__))
 DATABASE_ENGINE = '' # DATABASE_ENGINE = 'sqlite3'
@@ -22,9 +22,9 @@ MIDDLEWARE_CLASSES = (
 )
 ROOT_URLCONF = 'django_snippets.urls'
 TEMPLATE_DIRS = (
-    DIR + 'templates',
-    DIR + 'search_the_web/templates',
-    DIR + 'jpycal/templates',
+    DIR + '/templates',
+    DIR + '/search_the_web/templates',
+    DIR + '/jpycal/templates',
 )
 INSTALLED_APPS = (
     'django_snippets.search_the_web',

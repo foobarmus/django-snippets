@@ -36,7 +36,7 @@ from django.template import Context
 from django.utils import simplejson as json
 
 from django_snippets.search_the_web.models import User
-from exceptions import WebService
+from exceptions import WebService, UserDoesNotExist
 import config
 
 
@@ -44,10 +44,12 @@ import config
 
 def getu(ip):
     try:
-        user = User.objects.get(userip=ip)
-    except User.DoesNotExist:
+        user = User.gql('WHERE userip = :1', ip).get()
+        if not user:
+            raise UserDoesNotExist
+    except UserDoesNotExist:
         user = User(userip=ip)
-        user.save()
+        user.put()
     return user
 
 def arank(url, user):

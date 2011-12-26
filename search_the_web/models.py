@@ -1,5 +1,5 @@
-from django.db import models
+from google.appengine.ext import db
 
-class User(models.Model):
-    userip = models.CharField(max_length=15)
-    uid = models.DateTimeField(auto_now_add=True) # spoof 'install date' for Alexa toolbar
+class User(db.Model):
+    userip = db.StringProperty()
+    uid = db.DateTimeProperty(auto_now_add=True) # spoof 'install date' for Alexa toolbar
