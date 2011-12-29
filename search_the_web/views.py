@@ -95,7 +95,7 @@ def search(request):
             qbits = re.split('sort:\s*(\w*)', f['q'])
             if len(qbits) > 1:
                 sort = qbits.pop(1).lower()
-                if not sort in ['alexa']: # ['alexa', 'other_support_rank', 'etc']
+                if not sort in ['alexa']: # , 'other_supported_rank', 'etc']
                     if not sort == 'yahoo':
                         broadcast = '%s rank not supported. Using default... (yahoo)' % sort.capitalize()
                     sort = None

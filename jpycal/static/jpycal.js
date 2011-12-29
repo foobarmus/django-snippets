@@ -1,6 +1,8 @@
 /* JS functions and callbacks for jpycal.
    Author: Mark Donald <mark@skagos.com.au> */
 
+var appPrefix = '/jpycal';
+
 function stringSub(str, arr) {
     var i, pattern, re, n = arr.length;
     for (i = 0; i < n; i++) {
@@ -18,71 +20,75 @@ function lpad(thing) {
 
 $(document).ready(function() {
 
-    $(function() {
-        $('form').bind('submit', function(event) {
-            formId = $(this).attr('id');
-            if (formId.indexOf('-ed') != -1) {
-                $.ajax({
-                    type: 'PUT',
-                    url: (formId.indexOf('allday') != -1) ? $('#ad_url_ed').val() : $('#url_ed').val(),
-                    data: $(this).serialize(),
-                    success: function() {
-                        $('#calendar').fullCalendar('refetchEvents');
-                    }
-                });
-            } else {
-                $.ajax({
-                    type: 'POST',
-                    url: '/event',
-                    data: $(this).serialize(),
-                    success: function() {
-                        $('#calendar').fullCalendar('refetchEvents');
-                    }
-                });
+    // modal dialog controllers
+    $('#allday').dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            'Create Event': function() {
+                $(this).dialog('close');
+                $(this).submit();
             }
-        });
-        $('#allday').dialog({
-            autoOpen: false,
-            modal: true,
-            buttons: {
-                'Create Event': function() {
-                    $(this).submit();
-                    $(this).dialog('close');
-                }
+        }
+    });
+    $('#timed').dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            'Create Event': function() {
+                $(this).dialog('close');
+                $(this).submit();
             }
-        });
-        $('#timed').dialog({
-            autoOpen: false,
-            modal: true,
-            buttons: {
-                'Create Event': function() {
-                    $(this).submit();
-                    $(this).dialog('close');
-                }
+        }
+    });
+    $('#allday-ed').dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            'Update Event': function() {
+                $(this).dialog('close');
+                $(this).submit();
             }
-        });
-        $('#allday-ed').dialog({
-            autoOpen: false,
-            modal: true,
-            buttons: {
-                'Update Event': function() {
-                    $(this).submit();
-                    $(this).dialog('close');
-                }
+        }
+    });
+    $('#timed-ed').dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            'Update Event': function() {
+                $(this).dialog('close');
+                $(this).submit();
             }
-        });
-        $('#timed-ed').dialog({
-            autoOpen: false,
-            modal: true,
-            buttons: {
-                'Update Event': function() {
-                    $(this).submit();
-                    $(this).dialog('close');
-                }
-            }
-        });
+        }
     });
 
+    // ajax form submission
+    $('form').bind('submit', function() {
+        formId = $(this).attr('id');
+        if (formId.indexOf('-ed') != -1) {
+            $.ajax({
+                type: 'POST',
+                url: appPrefix +
+                     ((formId.indexOf('allday') != -1) ? $('#ad_url_ed').val() : $('#url_ed').val()),
+                data: $(this).serialize(),
+                success: function() {
+                    $('#calendar').fullCalendar('refetchEvents');
+                }
+            });
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: appPrefix + '/events',
+                data: $(this).serialize(),
+                success: function() {
+                    $('#calendar').fullCalendar('refetchEvents');
+                }
+            });
+        }
+        return false;
+    });
+
+    // calendar widget
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -91,7 +97,7 @@ $(document).ready(function() {
         },
         allDayDefault: false,
         // weekends: false, // uncomment to hide Saturdays and Sundays
-        events: '/batch',
+        events: appPrefix + '/events',
         editable: true,
         dayClick: function(date, allDay, jsEvent, view) {
             var date_arr = [
@@ -156,14 +162,28 @@ $(document).ready(function() {
             
             $.ajax({
                 type: 'PUT',
-                url: event.url,
+                url: appPrefix + event.url,
                 data: {
                     start: stringSub('{0}-{1}-{2} {3}:{4}', start),
                     end: stringSub('{0}-{1}-{2} {3}:{4}', end),
                     allDay: allDay
-                },
+                }
+            });
+        },
+        eventResize: function(event) {
+            var end = [
+                event.end.getFullYear(),
+                lpad(event.end.getMonth() + 1),
+                lpad(event.end.getDate()),
+                lpad(event.end.getHours()),
+                lpad(event.end.getMinutes())
+            ];
+            $.ajax({
+                type: 'PUT',
+                url: appPrefix + event.url,
+                data: {end: stringSub('{0}-{1}-{2} {3}:{4}', end)}
             });
         }
-    })
+    });
 
 });

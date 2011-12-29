@@ -1,6 +1,6 @@
 from os import path
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 DIR = path.abspath(path.dirname(__file__))
 DATABASE_ENGINE = '' # DATABASE_ENGINE = 'sqlite3'

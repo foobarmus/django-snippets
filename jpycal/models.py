@@ -1,3 +1,7 @@
+from google.appengine.ext import db
+
+dfmt = '%Y-%m-%dT%H:%M:%S'
+
 class Event(db.Model):
     """
     Define events to store in datastore.
