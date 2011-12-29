@@ -161,12 +161,13 @@ $(document).ready(function() {
             ] : start;
             
             $.ajax({
-                type: 'PUT',
+                type: 'POST',
                 url: appPrefix + event.url,
                 data: {
                     start: stringSub('{0}-{1}-{2} {3}:{4}', start),
                     end: stringSub('{0}-{1}-{2} {3}:{4}', end),
-                    allDay: allDay
+                    allDay: allDay,
+                    method: 'PUT'
                 }
             });
         },
@@ -179,9 +180,12 @@ $(document).ready(function() {
                 lpad(event.end.getMinutes())
             ];
             $.ajax({
-                type: 'PUT',
+                type: 'POST',
                 url: appPrefix + event.url,
-                data: {end: stringSub('{0}-{1}-{2} {3}:{4}', end)}
+                data: {
+                    end: stringSub('{0}-{1}-{2} {3}:{4}', end),
+                    method: 'PUT'
+                }
             });
         }
     });

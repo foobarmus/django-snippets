@@ -2,5 +2,5 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     (r'^jpycal', include('django_snippets.jpycal.urls')),
-    (r'^', include('django_snippets.search_the_web.urls')),
+    (r'^search', include('django_snippets.search_the_web.urls')),
 )

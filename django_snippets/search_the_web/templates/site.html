@@ -3,17 +3,17 @@
 {% block html %}
     <head>
         <title>Search the Web</title>
-        <link rel="stylesheet" type="text/css" href="/static/search_the_web/site.css" />
-        <!--[if lt IE 9 ]><link rel="stylesheet" type="text/css" href="/static/search_the_web/ie-hacks.css" /><![endif]-->
+        <link rel="stylesheet" type="text/css" href="/search_the_web/static/site.css" />
+        <!--[if lt IE 9 ]><link rel="stylesheet" type="text/css" href="/search_the_web/static/ie-hacks.css" /><![endif]-->
 
-        <script type="text/javascript" src="/static/search_the_web/main.js"></script>
+        <script type="text/javascript" src="/search_the_web/static/main.js"></script>
     </head>
     <body onload="focus()">
         {% if broadcast %}
             <div id="broadcast">{{broadcast}}</div>
         {% endif %}
         <div id="form">
-            <form name="search" action="/" onsubmit="return validate(this)">
+            <form name="search" action="/search" onsubmit="return validate(this)">
                 <fieldset>
                     <legend>Search parameters</legend>
                     <label for="q" id="q-label">Search the Web</label>
@@ -24,7 +24,7 @@
         {% block results %}{% endblock %}
         <div id="attribution">
             <a href="http://developer.yahoo.com/search/boss/" target ="_blank">
-            <img src="/static/search_the_web/createdwith2.png">
+            <img src="/search_the_web/static/createdwith2.png">
             </a>
         </div>
     </body>

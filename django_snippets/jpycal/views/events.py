@@ -1,3 +1,17 @@
+"""
+Controllers for jpycal.
+Author: Mark Donald <mark@skagos.com.au>
+
+The dispatch function sends requests to
+dispatcher.py which invokes the appropriate
+controller. For example:
+
+/events (GET)  > get(request)
+/events (POST) > post(request)
+
+and so on...
+
+"""
 from datetime import datetime
 
 from django.shortcuts import render_to_response
@@ -103,7 +117,8 @@ class event:
         # format and deliver, based on expected output
         accept = self.request.META['HTTP_ACCEPT']
         if accept and accept == json_hdr:
-            return HttpResponse(json.dumps(e.dict_()), mimetype=json_hdr)
+            return HttpResponse(json.dumps(e.dict_()),
+                                mimetype=json_hdr)
         else:
             return render_to_response('event.html', {'e':e})
 

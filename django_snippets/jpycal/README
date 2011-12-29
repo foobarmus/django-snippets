@@ -1,0 +1,23 @@
+Jpycal 1.0 (django/GAE)
+Author: Mark Donald <mark@skagos.com.au>
+
+Abstract
+========
+Jpycal is a pluggable django app that
+implements a RESTful event management API.
+It contains a web interface based on Adam
+Shaw's FullCalendar JQuery plugin, with
+basic event creation and editing functions
+added.
+
+Out of the box, it is configured for GAE
+deployment, so events are stored in GAE's
+datastore.
+
+License
+=======
+Jpycal is released under a BSD license
+which is included with this package.
+
+FullCalendar is dual-licensed under MIT
+and GPL v2.

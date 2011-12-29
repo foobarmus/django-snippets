@@ -4,7 +4,6 @@ WSGI application for GAE.
 For normal django deployment, django.wsgi is used instead.
 """ 
 import os, sys
-sys.path.append('/Users/mark/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'django_snippets.settings'
 
 from google.appengine.dist import use_library

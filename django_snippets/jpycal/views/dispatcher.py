@@ -1,3 +1,13 @@
+"""
+Request dispatcher for jpycal.
+Author: Mark Donald <mark@skagos.com.au>
+
+Exposes our RESTful url scheme to Django's built-in
+url dispatcher. For clarity, this probably should
+be called 'subdispatcher' but I prefer the shorter
+version.
+
+"""
 from django.http import Http404
 
 class UnknownMethod(ValueError):
@@ -60,7 +70,8 @@ class resource:
         brevity).
 
         Fullcalendar is configured to issue PUTs as overloaded
-        POST requests, in accordance with the HTML5 spec.
+        POST requests, in accordance with the HTML5 spec, so
+        never calls this function.
 
         """
         if request.method == verb:
