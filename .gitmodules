@@ -4,3 +4,6 @@
 [submodule "django_snippets/jpycal"]
 	path = django_snippets/jpycal
 	url = git@github.com:foobarmus/jpycal.git
+[submodule "django_snippets/search_the_web"]
+	path = django_snippets/search_the_web
+	url = git@github.com:foobarmus/search_the_web.git
