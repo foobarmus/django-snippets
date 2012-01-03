@@ -1,0 +1,3 @@
+[submodule "django_snippets/nuthouse"]
+	path = django_snippets/nuthouse
+	url = git@github.com:foobarmus/nuthouse.git

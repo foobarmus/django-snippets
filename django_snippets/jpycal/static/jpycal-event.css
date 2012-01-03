@@ -1,5 +1,0 @@
-#event_wr {text-align:center;}
-#event_wr table {width:300px; margin:auto; border:4px double #def; border-collapse:collapse;}
-#event_wr table th, #event_wr table td {padding:2px 1em; background:#def; text-align:left;}
-#event_wr table th.break, #event_wr table td.break {padding:1ex 1em; border-top:1px dotted white;}
-#event_wr div {margin-top:2em;}

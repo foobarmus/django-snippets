@@ -1,7 +1,0 @@
-body {font:small Arial, sans-serif;}
-label, input, textarea {display:block;}
-input.text, textarea.text {margin-bottom:12px; width:95%; padding:.4em;}
-fieldset {padding:0; border:0; margin-top:25px;}
-#allday, #timed {display:none;}
-#titledate {text-align:center;}
-#calendar {width:60%; margin:2em auto;}
