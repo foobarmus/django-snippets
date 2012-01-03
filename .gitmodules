@@ -1,3 +1,6 @@
 [submodule "django_snippets/nuthouse"]
 	path = django_snippets/nuthouse
 	url = git@github.com:foobarmus/nuthouse.git
+[submodule "django_snippets/jpycal"]
+	path = django_snippets/jpycal
+	url = git@github.com:foobarmus/jpycal.git
