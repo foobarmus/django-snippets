@@ -13,3 +13,97 @@ the query, eg 'jenson button sort:alexa'
 
 Supported rankings are Yahoo (default) and Alexa.
 
+
+Dependencies
+------------
+
+python-oauth2   https://github.com/simplegeo/python-oauth2
+httplib2        http://code.google.com/p/httplib2
+
+Additional for non-GAE deployment:
+    Django 1.1+
+
+    if serving with Apache:
+        Apache 2.2
+        mod-wsgi 
+
+
+Installation (non-GAE)
+----------------------
+
+1.  Create a django project called 'django_snippets' and copy
+    everything from the tarball into it, overwriting settings.py,
+    etc...
+
+2.  Uncomment the database lines in settings.py
+
+3.  Create a db/ directory inside the project
+
+4.  Sync the database and give it to Apache (if you want to serve
+    it properly).
+
+    $ python manage.py syncdb
+    # chown -R yourself:www-data db/
+    # chmod -R g+w db/
+
+
+Yahoo consumer details
+----------------------
+
+When you set up a boss-enabled application at developer.yahoo.com,
+you get a consumer key and consumer secret. The app uses these to
+sign the oauth payload.
+
+Create a config.py file inside the app directory, with a single
+dictionary in it, as follows:
+
+yboss = {
+    'key':'YOUR_CUSTOMER_KEY',
+    'secret':'YOUR_CUSTOMER_SECRET'
+}
+
+At this point, you should be able to run the app using GAE's
+development server.
+
+# python manage.py runserver
+
+If you want to extend the app at some point to do anything remotely
+interesting with non-oauth sessions, which it doesn't at the moment,
+change the SECRET_KEY in snippets/settings.py to something
+appropriate and keep it secret.
+
+
+VirtualHost (Apache)
+--------------------
+
+Notes:
+
+1. Alias /static/ ... will ensure Apache serves static content
+   directly, rather than sucking it through django. This directive
+   must occur prior to the WSGIScriptAlias.
+
+2. Because django.wsgi resides in a folder containing other code,
+   for security reasons you must make it available explicitly,
+   rather than by unlocking its parent directory.
+
+<VirtualHost *:80>
+
+    ServerName yourservername.com
+    ServerAlias www.yourservername.com
+
+    Alias /static/ /usr/local/django/snippets/static/
+    <Directory /usr/local/django/snippets/static/>
+        AllowOverride None
+        Options all 
+        Order deny,allow
+        Allow from all 
+    </Directory>
+
+    WSGIScriptAlias / /usr/local/django/snippets/django.wsgi
+    <Files /usr/local/django/snippets/django.wsgi>
+        Order deny,allow
+        Allow from all 
+    </Files>
+
+</VirtualHost>
+
